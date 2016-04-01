@@ -69,7 +69,9 @@ func TestAction(t *testing.T) {
 }
 
 func TestWatchNoFiltering(t *testing.T) {
-	actualEvents := []string{}
+	safeActual := &safeSlice{
+		data: []string{},
+	}
 	expectedEvents := []string{
 		"container-create",
 		"container-start",
@@ -98,17 +100,20 @@ func TestWatchNoFiltering(t *testing.T) {
 
 	eh := NewEventHandler(func(e eventtypes.Message) string { return "" })
 	eh.Handle("", func(e eventtypes.Message) {
-		actualEvents = append(actualEvents, e.Type+"-"+e.Action)
+		safeActual.Add(e.Type + "-" + e.Action)
 	})
 	eh.Watch(eventChan)
 
+	actualEvents := safeActual.Read()
 	if !reflect.DeepEqual(actualEvents, expectedEvents) {
 		t.Fatalf("expected %v, got %v", expectedEvents, actualEvents)
 	}
 }
 
 func TestWatchFiltering(t *testing.T) {
-	actualEvents := []string{}
+	safeActual := &safeSlice{
+		data: []string{},
+	}
 	expectedEvents := []string{
 		"container-create",
 		"container-start",
@@ -136,10 +141,11 @@ func TestWatchFiltering(t *testing.T) {
 
 	eh := NewEventHandler(func(e eventtypes.Message) string { return e.Type })
 	eh.Handle("container", func(e eventtypes.Message) {
-		actualEvents = append(actualEvents, e.Type+"-"+e.Action)
+		safeActual.Add(e.Type + "-" + e.Action)
 	})
 	eh.Watch(eventChan)
 
+	actualEvents := safeActual.Read()
 	if !reflect.DeepEqual(actualEvents, expectedEvents) {
 		t.Fatalf("expected %v, got %v", expectedEvents, actualEvents)
 	}

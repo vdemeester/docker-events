@@ -6,6 +6,7 @@ import (
 	"io"
 	"io/ioutil"
 	"reflect"
+	"sync"
 	"testing"
 	"time"
 
@@ -114,7 +115,9 @@ func TestMonitorEvents(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		actual := []string{}
+		safeActual := &safeSlice{
+			data: []string{},
+		}
 		cli := &fakeEventClient{
 			events: c.events,
 		}
@@ -123,13 +126,14 @@ func TestMonitorEvents(t *testing.T) {
 		defer cancel()
 
 		errChan := MonitorEvents(ctx, cli, types.EventsOptions{}, func(m eventtypes.Message) {
-			actual = append(actual, m.Type+"-"+m.Action)
+			safeActual.Add(m.Type + "-" + m.Action)
 		})
 
 		if err := <-errChan; err != nil {
 			t.Fatal(err)
 		}
 
+		actual := safeActual.Read()
 		if !reflect.DeepEqual(c.expected, actual) {
 			t.Fatalf("expected %v, got %v", c.expected, actual)
 		}
@@ -174,4 +178,21 @@ func (c *fakeEventClient) Events(ctx context.Context, options types.EventsOption
 	}()
 
 	return ioutil.NopCloser(pr), nil
+}
+
+type safeSlice struct {
+	mu   sync.RWMutex
+	data []string
+}
+
+func (s *safeSlice) Add(element string) {
+	s.mu.Lock()
+	s.data = append(s.data, element)
+	s.mu.Unlock()
+}
+
+func (s *safeSlice) Read() []string {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	return s.data
 }
