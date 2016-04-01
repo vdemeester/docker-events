@@ -98,11 +98,11 @@ func TestWatchNoFiltering(t *testing.T) {
 		close(eventChan)
 	}()
 
-	eh := NewEventHandler(func(e eventtypes.Message) string { return "" })
-	eh.Handle("", func(e eventtypes.Message) {
+	h := NewHandler(func(e eventtypes.Message) string { return "" })
+	h.Handle("", func(e eventtypes.Message) {
 		safeActual.Add(e.Type + "-" + e.Action)
 	})
-	eh.Watch(eventChan)
+	h.Watch(eventChan)
 
 	actualEvents := safeActual.Read()
 	if !reflect.DeepEqual(actualEvents, expectedEvents) {
@@ -139,11 +139,11 @@ func TestWatchFiltering(t *testing.T) {
 		close(eventChan)
 	}()
 
-	eh := NewEventHandler(func(e eventtypes.Message) string { return e.Type })
-	eh.Handle("container", func(e eventtypes.Message) {
+	h := NewHandler(func(e eventtypes.Message) string { return e.Type })
+	h.Handle("container", func(e eventtypes.Message) {
 		safeActual.Add(e.Type + "-" + e.Action)
 	})
-	eh.Watch(eventChan)
+	h.Watch(eventChan)
 
 	actualEvents := safeActual.Read()
 	if !reflect.DeepEqual(actualEvents, expectedEvents) {

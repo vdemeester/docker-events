@@ -11,22 +11,28 @@ import (
 	eventtypes "github.com/docker/engine-api/types/events"
 )
 
-func MonitorEvents(ctx context.Context, cli client.APIClient, options types.EventsOptions, fun func(m eventtypes.Message)) chan error {
-	eventHandler := NewEventHandler(func(_ eventtypes.Message) string {
+// Monitor subscribes to the docker events api using engine api and will execute the
+// specified function on each message.
+// It will pass the specified options to the underline method (i.e Events).
+func Monitor(ctx context.Context, cli client.APIClient, options types.EventsOptions, fun func(m eventtypes.Message)) chan error {
+	handler := NewHandler(func(_ eventtypes.Message) string {
 		// Let's return always the same thing to not filter at all
 		return ""
 	})
-	eventHandler.Handle("", fun)
+	handler.Handle("", fun)
 
-	return MonitorEventsWithHandler(ctx, cli, options, eventHandler)
+	return MonitorWithHandler(ctx, cli, options, handler)
 }
 
-func MonitorEventsWithHandler(ctx context.Context, cli client.APIClient, options types.EventsOptions, eventHandler *EventHandler) chan error {
+// MonitorWithHandler subscribes to the docker events api using engine api and will pass the message
+// to the specified Handler, that will take care of it.
+// It will pass the specified options to the underline method (i.e Events).
+func MonitorWithHandler(ctx context.Context, cli client.APIClient, options types.EventsOptions, handler *Handler) chan error {
 	eventChan := make(chan eventtypes.Message)
 	errChan := make(chan error)
 	started := make(chan struct{})
 
-	go eventHandler.Watch(eventChan)
+	go handler.Watch(eventChan)
 	go monitorEvents(cli, options, started, eventChan, errChan)
 
 	go func() {

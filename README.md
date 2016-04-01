@@ -17,7 +17,7 @@ if err != nil {
     // Do something..
 }
 
-errChan := events.MonitorEvents(context.Background(), cli, types.EventsOptions{}, func(event eventtypes.Message) {
+errChan := events.Monitor(context.Background(), cli, types.EventsOptions{}, func(event eventtypes.Message) {
     fmt.Printf("%v\n", event)
 })
 
@@ -40,7 +40,7 @@ if err != nil {
 }
 
 // Setup the event handler
-eventHandler := events.NewEventHandler(events.ByAction())
+eventHandler := events.NewHandler(events.ByAction())
 eventHandler.Handle("create", func(m eventtypes.Message) {
     // Do something in case of create message
 })
@@ -62,7 +62,7 @@ options := types.EventsOptions{
     Filters: filters,
 }
 
-errChan := events.MonitorEvents(context.Background(), cli, options, eventHandler)
+errChan := events.MonitorWithHandler(context.Background(), cli, options, eventHandler)
 
 if err := <-errChan; err != nil {
     // Do something

@@ -17,13 +17,13 @@ import (
 	eventtypes "github.com/docker/engine-api/types/events"
 )
 
-func TestMonitorEventsError(t *testing.T) {
+func TestMonitorError(t *testing.T) {
 	cli := &NopClient{}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 	defer cancel()
 
-	errChan := MonitorEvents(ctx, cli, types.EventsOptions{}, func(m eventtypes.Message) {
+	errChan := Monitor(ctx, cli, types.EventsOptions{}, func(m eventtypes.Message) {
 		// Do nothing
 	})
 
@@ -32,13 +32,13 @@ func TestMonitorEventsError(t *testing.T) {
 	}
 
 }
-func TestMonitorEventsErrorDecoding(t *testing.T) {
+func TestMonitorErrorDecoding(t *testing.T) {
 	cli := &errorEventClient{}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 	defer cancel()
 
-	errChan := MonitorEvents(ctx, cli, types.EventsOptions{}, func(m eventtypes.Message) {
+	errChan := Monitor(ctx, cli, types.EventsOptions{}, func(m eventtypes.Message) {
 		// Do nothing
 	})
 
@@ -66,7 +66,7 @@ func (c *errorEventClient) Events(ctx context.Context, options types.EventsOptio
 	return ioutil.NopCloser(pr), nil
 }
 
-func TestMonitorEvents(t *testing.T) {
+func TestMonitor(t *testing.T) {
 	cases := []struct {
 		expected []string
 		events   []eventtypes.Message
@@ -125,7 +125,7 @@ func TestMonitorEvents(t *testing.T) {
 		ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 		defer cancel()
 
-		errChan := MonitorEvents(ctx, cli, types.EventsOptions{}, func(m eventtypes.Message) {
+		errChan := Monitor(ctx, cli, types.EventsOptions{}, func(m eventtypes.Message) {
 			safeActual.Add(m.Type + "-" + m.Action)
 		})
 
@@ -140,7 +140,7 @@ func TestMonitorEvents(t *testing.T) {
 	}
 }
 
-func ExampleMonitorEvents() {
+func ExampleMonitor() {
 	cli, err := client.NewEnvClient()
 	if err != nil {
 		// Do something..
@@ -149,7 +149,7 @@ func ExampleMonitorEvents() {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	errChan := MonitorEvents(ctx, cli, types.EventsOptions{}, func(event eventtypes.Message) {
+	errChan := Monitor(ctx, cli, types.EventsOptions{}, func(event eventtypes.Message) {
 		fmt.Printf("%v\n", event)
 	})
 
