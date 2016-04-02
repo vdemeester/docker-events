@@ -44,7 +44,7 @@ if err != nil {
 }
 
 // Setup the event handler
-eventHandler := events.NewHandler(events.ByAction())
+eventHandler := events.NewHandler(events.ByAction)
 eventHandler.Handle("create", func(m eventtypes.Message) {
     // Do something in case of create message
 })
