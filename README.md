@@ -1,4 +1,9 @@
-# docker-events [![Build Status](https://travis-ci.org/vdemeester/docker-events.svg?branch=master)](https://travis-ci.org/vdemeester/docker-events)
+# docker-events
+[![GoDoc](https://godoc.org/github.com/vdemeester/docker-events?status.png)](https://godoc.org/github.com/vdemeester/docker-events)
+[![Build Status](https://travis-ci.org/vdemeester/docker-events.svg?branch=master)](https://travis-ci.org/vdemeester/docker-events)
+[![Go Report Card](https://goreportcard.com/badge/github.com/vdemeester/docker-events)](https://goreportcard.com/report/github.com/vdemeester/docker-events)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/containous/traefik/blob/master/LICENSE.md)
+[![GitHub license](https://img.shields.io/github/license/vdemeester/docker-events.svg)]()
 
 A really small library with the intent to ease the use of `Events`
 method of `engine-api`.
