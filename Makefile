@@ -1,6 +1,6 @@
 .PHONY: all deps test validate vet lint fmt
 
-all: deps validate test ## get dependencies, validate all checks and run tests
+all: deps validate test-unit ## get dependencies, validate all checks and run tests
 
 deps: ## get dependencies
 	go get -t ./...
