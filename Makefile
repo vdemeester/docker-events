@@ -6,7 +6,7 @@ deps: ## get dependencies
 	go get -t ./...
 	go get github.com/golang/lint/golint
 
-test: ## run tests
+test-unit: ## run tests
 	go test -timeout 10s -v -race -cover ./...
 
 validate: vet lint fmt ## validate gofmt, golint and go vet
