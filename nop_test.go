@@ -177,7 +177,7 @@ func (client *NopClient) CopyFromContainer(ctx context.Context, container, srcPa
 }
 
 // CopyToContainer copies content into the container filesystem
-func (client *NopClient) CopyToContainer(ctx context.Context, options types.CopyToContainerOptions) error {
+func (client *NopClient) CopyToContainer(ctx context.Context, container, path string, content io.Reader, options types.CopyToContainerOptions) error {
 	return errNoEngine
 }
 
