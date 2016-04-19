@@ -21,7 +21,10 @@ if err != nil {
     // Do something..
 }
 
-errChan := events.Monitor(context.Background(), cli, types.EventsOptions{}, func(event eventtypes.Message) {
+cxt, cancel := context.WithCancel(context.Background())
+// Call cancel() to get out of the monitor
+
+errChan := events.Monitor(ctx, cli, types.EventsOptions{}, func(event eventtypes.Message) {
     fmt.Printf("%v\n", event)
 })
 
@@ -66,7 +69,10 @@ options := types.EventsOptions{
     Filters: filters,
 }
 
-errChan := events.MonitorWithHandler(context.Background(), cli, options, eventHandler)
+cxt, cancel := context.WithCancel(context.Background())
+// Call cancel() to get out of the monitor
+
+errChan := events.MonitorWithHandler(ctx, cli, options, eventHandler)
 
 if err := <-errChan; err != nil {
     // Do something
