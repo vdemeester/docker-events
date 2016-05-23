@@ -30,6 +30,15 @@ func NewNopClient() *NopClient {
 func (client *NopClient) ClientVersion() string {
 	return ""
 }
+func (client *NopClient) CheckpointCreate(ctx context.Context, container string, options types.CheckpointCreateOptions) error {
+	return errNoEngine
+}
+func (client *NopClient) CheckpointDelete(ctx context.Context, container string, checkpointID string) error {
+	return errNoEngine
+}
+func (client *NopClient) CheckpointList(ctx context.Context, container string) ([]types.Checkpoint, error) {
+	return []types.Checkpoint{}, errNoEngine
+}
 
 // ContainerAttach attaches a connection to a container in the server
 func (client *NopClient) ContainerAttach(ctx context.Context, container string, options types.ContainerAttachOptions) (types.HijackedResponse, error) {
@@ -142,7 +151,7 @@ func (client *NopClient) ContainerStats(ctx context.Context, container string, s
 }
 
 // ContainerStart sends a request to the docker daemon to start a container
-func (client *NopClient) ContainerStart(ctx context.Context, container string) error {
+func (client *NopClient) ContainerStart(ctx context.Context, container string, checkpoint string) error {
 	return errNoEngine
 }
 

@@ -33,7 +33,7 @@ func MonitorWithHandler(ctx context.Context, cli client.APIClient, options types
 	started := make(chan struct{})
 
 	go handler.Watch(eventChan)
-	go monitorEvents(cli, options, started, eventChan, errChan)
+	go monitorEvents(ctx, cli, options, started, eventChan, errChan)
 
 	go func() {
 		for {
@@ -49,8 +49,8 @@ func MonitorWithHandler(ctx context.Context, cli client.APIClient, options types
 	return errChan
 }
 
-func monitorEvents(cli client.APIClient, options types.EventsOptions, started chan struct{}, eventChan chan eventtypes.Message, errChan chan error) {
-	body, err := cli.Events(context.Background(), options)
+func monitorEvents(ctx context.Context, cli client.APIClient, options types.EventsOptions, started chan struct{}, eventChan chan eventtypes.Message, errChan chan error) {
+	body, err := cli.Events(ctx, options)
 	// Whether we successfully subscribed to events or not, we can now
 	// unblock the main goroutine.
 	close(started)
