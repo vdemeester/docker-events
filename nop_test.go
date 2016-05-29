@@ -30,12 +30,18 @@ func NewNopClient() *NopClient {
 func (client *NopClient) ClientVersion() string {
 	return ""
 }
+
+// CheckpointCreate creates a checkpoint from the given container with the given name
 func (client *NopClient) CheckpointCreate(ctx context.Context, container string, options types.CheckpointCreateOptions) error {
 	return errNoEngine
 }
+
+// CheckpointDelete deletes the checkpoint with the given name from the given container
 func (client *NopClient) CheckpointDelete(ctx context.Context, container string, checkpointID string) error {
 	return errNoEngine
 }
+
+// CheckpointList returns the volumes configured in the docker host.
 func (client *NopClient) CheckpointList(ctx context.Context, container string) ([]types.Checkpoint, error) {
 	return []types.Checkpoint{}, errNoEngine
 }
@@ -285,6 +291,11 @@ func (client *NopClient) NetworkInspect(ctx context.Context, networkID string) (
 	return types.NetworkResource{}, errNoEngine
 }
 
+// NetworkInspectWithRaw returns the information for a specific network configured in the docker host and it's raw representation.
+func (client *NopClient) NetworkInspectWithRaw(ctx context.Context, networkID string) (types.NetworkResource, []byte, error) {
+	return types.NetworkResource{}, []byte{}, errNoEngine
+}
+
 // NetworkList returns the list of networks configured in the docker host
 func (client *NopClient) NetworkList(ctx context.Context, options types.NetworkListOptions) ([]types.NetworkResource, error) {
 	return nil, errNoEngine
@@ -317,6 +328,11 @@ func (client *NopClient) VolumeCreate(ctx context.Context, options types.VolumeC
 // VolumeInspect returns the information about a specific volume in the docker host
 func (client *NopClient) VolumeInspect(ctx context.Context, volumeID string) (types.Volume, error) {
 	return types.Volume{}, errNoEngine
+}
+
+// VolumeInspectWithRaw returns the information about a specific volume in the docker host and it's raw representation
+func (client *NopClient) VolumeInspectWithRaw(ctx context.Context, volumeID string) (types.Volume, []byte, error) {
+	return types.Volume{}, []byte{}, errNoEngine
 }
 
 // VolumeList returns the volumes configured in the docker host
