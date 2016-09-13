@@ -3,7 +3,7 @@ package events
 import (
 	"sync"
 
-	eventtypes "github.com/docker/engine-api/types/events"
+	eventtypes "github.com/docker/docker/api/types/events"
 )
 
 // NewHandler creates an event handler using the specified function to qualify the message

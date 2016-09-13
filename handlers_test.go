@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	eventtypes "github.com/docker/engine-api/types/events"
+	eventtypes "github.com/docker/docker/api/types/events"
 )
 
 func TestByType(t *testing.T) {
