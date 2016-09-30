@@ -4,6 +4,11 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/vdemeester/docker-events)](https://goreportcard.com/report/github.com/vdemeester/docker-events)
 [![License](https://img.shields.io/github/license/vdemeester/docker-events.svg)]()
 
+**With
+[moving event stream processing to engine api](https://github.com/docker/docker/pull/25853) merged
+in docker/docker, this project is obsolete and won't work with the
+latest docker/docker/client api.**
+
 A really small library with the intent to ease the use of `Events`
 method of `engine-api`.
 
