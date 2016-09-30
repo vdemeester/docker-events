@@ -12,9 +12,9 @@ import (
 
 	"golang.org/x/net/context"
 
-	"github.com/docker/engine-api/client"
-	"github.com/docker/engine-api/types"
-	eventtypes "github.com/docker/engine-api/types/events"
+	"github.com/docker/docker/client"
+	"github.com/docker/docker/api/types"
+	eventtypes "github.com/docker/docker/api/types/events"
 )
 
 func TestMonitorError(t *testing.T) {
